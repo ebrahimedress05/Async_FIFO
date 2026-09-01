@@ -1,15 +1,15 @@
-module FIFO_wptr #(parameter addr_wirth = 3)(
+module FIFO_wptr #(parameter addr_width = 3)(
     input wire W_inc ,
     input wire W_CLK ,
     input wire W_RST ,
-    input wire [addr_wirth : 0] wq2_rptr ,
-    output reg [addr_wirth-1 : 0] W_addr ,
-    output reg [addr_wirth : 0] W_ptr ,
+    input wire [addr_width : 0] wq2_rptr ,
+    output reg [addr_width-1 : 0] W_addr ,
+    output reg [addr_width : 0] W_ptr ,
     output reg W_full
 );
     integer i ;
     reg extra_bit ;
-    wire [addr_wirth : 0] W_ptr_in ;
+    wire [addr_width : 0] W_ptr_in ;
 
     // write address logic
     always @(posedge W_CLK or negedge W_RST) begin
@@ -32,15 +32,15 @@ module FIFO_wptr #(parameter addr_wirth = 3)(
 
     // gray code logic
     always @(*) begin
-        for (i=0 ; i<addr_wirth ; i=i+1) begin
+        for (i=0 ; i<addr_width ; i=i+1) begin
             W_ptr[i] = W_ptr_in[i] ^ W_ptr_in[i+1] ;
         end
-         W_ptr[addr_wirth] = W_ptr_in[addr_wirth] ;
+         W_ptr[addr_width] = W_ptr_in[addr_width] ;
     end
 
     // full flag logic    
     always @(*) begin
-        if(wq2_rptr == {~W_ptr[addr_wirth] , ~W_ptr[addr_wirth-1] , W_ptr[addr_wirth-2 : 0]}) begin
+        if(wq2_rptr == {~W_ptr[addr_width] , ~W_ptr[addr_width-1] , W_ptr[addr_width-2 : 0]}) begin
             W_full = 1 ;
         end
         else begin
