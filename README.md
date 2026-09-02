@@ -8,7 +8,7 @@ A dual-clock asynchronous FIFO (2-port memory) implemented in Verilog, using Gra
 
 An asynchronous FIFO connects two clock domains: a **write side** (`W_CLK`) and a **read side** (`R_CLK`). Each side keeps its own pointer into a shared dual-port memory. To compare pointers safely across domains without metastability risk, both pointers are encoded in **Gray code** (only one bit changes per increment) before being synchronized into the other domain through a double-flop synchronizer.
 
-Planned top-level ports (`ASYNC_FIFO`):
+Planned top-level ports (`ASYNC_FIFO`, per spec — not yet implemented):
 
 | Signal     | Direction | Width           | Description                     |
 |------------|-----------|-----------------|-----------------------------------|
@@ -33,6 +33,45 @@ Parameter: `DATA_WIDTH` (default 8).
 - [ ] **FIFO_MEM_CNTRL** – the dual-port memory array itself (write on `W_CLK`, read on `R_CLK`)
 - [ ] **ASYNC_FIFO** – top-level module wiring the above together
 - [ ] Testbench (100 MHz write / 40 MHz read, 9 data bytes, sized to avoid overflow)
+
+### FIFO_wptr
+
+`module FIFO_wptr #(parameter addr_width = 3) (...)`
+
+| Signal      | Direction | Width           | Description                                  |
+|-------------|-----------|-----------------|-------------------------------------------------|
+| `W_inc`     | input     | 1               | Write enable                                    |
+| `W_CLK`     | input     | 1               | Write domain clock                              |
+| `W_RST`     | input     | 1               | Write domain active-low async reset             |
+| `wq2_rptr`  | input     | `addr_width+1`  | Read pointer, synchronized into the write domain|
+| `W_addr`    | output    | `addr_width`    | Write address (binary, into the memory)         |
+| `W_ptr`     | output    | `addr_width+1`  | Write pointer (Gray-coded, registered)          |
+| `W_full`    | output    | 1               | FIFO full flag                                  |
+
+### FIFO_rptr
+
+`module FIFO_rptr #(parameter addr_width = 3) (...)`
+
+| Signal      | Direction | Width           | Description                                  |
+|-------------|-----------|-----------------|-------------------------------------------------|
+| `R_inc`     | input     | 1               | Read enable                                     |
+| `R_CLK`     | input     | 1               | Read domain clock                               |
+| `R_RST`     | input     | 1               | Read domain active-low async reset              |
+| `rq2_wptr`  | input     | `addr_width+1`  | Write pointer, synchronized into the read domain|
+| `R_addr`    | output    | `addr_width`    | Read address (binary, into the memory)          |
+| `R_ptr`     | output    | `addr_width+1`  | Read pointer (Gray-coded, registered)           |
+| `R_empty`   | output    | 1               | FIFO empty flag                                 |
+
+### DF_SYNC
+
+`module DF_SYNC #(parameter data_width = 4, NUM_STAGES = 2) (...)`
+
+| Signal        | Direction | Width         | Description                                  |
+|---------------|-----------|---------------|-------------------------------------------------|
+| `CLK`         | input     | 1             | Destination domain clock                        |
+| `RST`         | input     | 1             | Destination domain active-low async reset       |
+| `unsync_bus`  | input     | `data_width`  | Unsynchronized bus (source domain)              |
+| `sync_bus`    | output    | `data_width`  | Synchronized bus (destination domain)           |
 
 ## Repository Structure
 
