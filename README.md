@@ -28,7 +28,7 @@ Parameter: `DATA_WIDTH` (default 8).
 ## Sub-modules (planned)
 
 - [x] **FIFO_wptr** – generates the write address, the Gray-coded write pointer, and the `FULL` flag by comparing against the synchronized read pointer
-- [ ] **FIFO_rptr** – generates the read address, the Gray-coded read pointer, and the `EMPTY` flag by comparing against the synchronized write pointer
+- [x] **FIFO_rptr** – generates the read address, the Gray-coded read pointer, and the `EMPTY` flag by comparing against the synchronized write pointer
 - [ ] **DF_SYNC** – double-flop synchronizer used to safely pass each Gray-coded pointer into the other clock domain
 - [ ] **FIFO_MEM_CNTRL** – the dual-port memory array itself (write on `W_CLK`, read on `R_CLK`)
 - [ ] **ASYNC_FIFO** – top-level module wiring the above together
