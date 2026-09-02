@@ -28,15 +28,20 @@ module FIFO_wptr #(parameter addr_width = 3)(
         end
     end
 
-    assign W_ptr_in = {extra_bit , W_addr} ;
-
+    assign W_ptr_in = {extra_bit , W_addr} + (W_inc & !W_full) ;
+ 
     // gray code logic
-    always @(*) begin
-        for (i=0 ; i<addr_width ; i=i+1) begin
-            W_ptr[i] = W_ptr_in[i] ^ W_ptr_in[i+1] ;
+    always @(posedge W_CLK or negedge W_RST) begin
+        if(!W_RST) begin
+            W_ptr <= 'b0 ;
+        end 
+        else begin
+            for (i=0 ; i<addr_width ; i=i+1) begin
+                W_ptr[i] <= W_ptr_in[i] ^ W_ptr_in[i+1] ;
+            end 
+             W_ptr[addr_width] <= W_ptr_in[addr_width] ;
         end
-         W_ptr[addr_width] = W_ptr_in[addr_width] ;
-    end
+    end    
 
     // full flag logic    
     always @(*) begin

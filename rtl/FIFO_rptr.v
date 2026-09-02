@@ -28,14 +28,19 @@ module FIFO_rptr #(parameter addr_width = 3)(
         end
     end
 
-    assign R_ptr_in = {extra_bit , R_addr} ;
+    assign R_ptr_in = {extra_bit , R_addr} + (R_inc & !R_empty) ;
 
     // gray code logic
-    always @(*) begin
-        for (i=0 ; i<addr_width ; i=i+1) begin
-            R_ptr[i] = R_ptr_in[i] ^ R_ptr_in[i+1] ;
+    always @(posedge R_CLK or negedge R_RST) begin
+        if(!R_RST) begin
+            R_ptr <= 'b0 ;
+        end 
+        else begin
+            for (i=0 ; i<addr_width ; i=i+1) begin
+                R_ptr[i] <= R_ptr_in[i] ^ R_ptr_in[i+1] ;
+            end 
+             R_ptr[addr_width] <= R_ptr_in[addr_width] ;
         end
-         R_ptr[addr_width] = R_ptr_in[addr_width] ;
     end
 
     // empty flag logic    
