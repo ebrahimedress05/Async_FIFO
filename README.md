@@ -90,8 +90,15 @@ Parameters: `data_width` (default 8), `depth` (default 8), `addr_width` (default
 ```
 rtl/            → design source files (top + 4 sub-modules)
 tb/             → testbench and simulation scripts
+lint_reports/   → lint check report
 docs/images/    → simulation waveform
 ```
+
+## Lint
+
+Checked with **Synopsys SpyGlass** (`SpyGlass_vL-2016.06`) using the `lint`, `morelint`, `clock-reset`, `erc`, `latch`, `starc`, `starc2005`, and `timing` rule sets — **0 warnings/violations**, only 2 informational messages (top-level design unit detection and elaboration summary). Full report in [`lint_reports/more_simple.rpt`](lint_reports/more_simple.rpt).
+
+> **Fix:** the earlier top-level (`ASYNC_FIFO.v`) had an invalid instantiation order — parameter overrides (`#(...)`) were placed *after* the instance name instead of between the module name and the instance name. All four instantiations (`FIFO_MEM_CNTRL`, `FIFO_wptr`, `FIFO_rptr`, the two `DF_SYNC`s) were corrected to the standard `module_name #(params) instance_name (.port(...))` form.
 
 ## Simulation Results
 
@@ -104,3 +111,4 @@ The testbench writes 9 bytes (`depth = 8`) while reads run concurrently on a slo
 ## Tools Used
 
 - Simulation: ModelSim/QuestaSim
+- Lint: Synopsys SpyGlass
