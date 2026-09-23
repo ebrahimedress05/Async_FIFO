@@ -30,6 +30,7 @@ module ASYNC_FIFO #(
         .addr_width(addr_width)
     ) FIFO_MEM_CNTRL (
         .W_data(W_data),
+        .W_RST(W_RST),
         .W_inc(W_inc),
         .W_full(W_full),
         .W_addr(W_addr),

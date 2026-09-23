@@ -106,7 +106,7 @@ The testbench writes 9 bytes (`depth = 8`) while reads run concurrently on a slo
 
 `W_full` pulses briefly once the write pointer catches up to the (synchronized) read pointer after the 8th write. Because reads are already progressing on their own clock, address `000` is freed by the time the 9th byte (`0xa0`) is written, so it correctly overwrites the oldest slot instead of being dropped — `R_data` then streams out all 9 bytes in order (`51, f1, 05, 33, 48, 96, ac, a6, a0`).
 
-![9-byte write/read waveform](docs/images/waveform_9byte_write_read.png)
+![9-byte write/read waveform](docs/images/waveform.png)
 
 ## Tools Used
 
