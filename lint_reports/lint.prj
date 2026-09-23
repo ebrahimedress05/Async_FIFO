@@ -4,17 +4,17 @@
 #  This is a software generated project file. Manual edits to this file could be lost during the next save operation
 #  Copyright Synopsys Inc.
 #  Last Updated By: SpyGlass SpyGlass_vL-2016.06
-#  Last Updated On Fri Sep  4 04:08:22 2026
+#  Last Updated On Wed Sep 23 21:04:36 2026
 #
 #  -------------------------------------------------------------------
 
 ##Data Import Section
 
-read_file -type verilog ASYNC_FIFO.v
-read_file -type verilog DF_SYNC.v
-read_file -type verilog FIFO_MEM_CNTRL.v
-read_file -type verilog FIFO_rptr.v
-read_file -type verilog FIFO_wptr.v
+read_file -type verilog rtl/ASYNC_FIFO.v
+read_file -type verilog rtl/DF_SYNC.v
+read_file -type verilog rtl/FIFO_MEM_CNTRL.v
+read_file -type verilog rtl/FIFO_rptr.v
+read_file -type verilog rtl/FIFO_wptr.v
 
 ##Common Options Section
 
@@ -28,4 +28,3 @@ set_option active_methodology $SPYGLASS_HOME/GuideWare/latest/block/rtl_handoff
 ##Goal Setup Section
 
 current_methodology $SPYGLASS_HOME/GuideWare/latest/block/rtl_handoff
-
